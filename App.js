@@ -1,8 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Button, View, TouchableOpacity, SafeAreaView, Text, TextInput } from 'react-native';
+import Picker from '@gregfrench/react-native-wheel-picker'
 
-var number = 1;
+var PickerItem = Picker.Item;
+
+
 
 const AppButton = ({ onPress, title }) => (
   <TouchableOpacity
@@ -13,17 +16,14 @@ const AppButton = ({ onPress, title }) => (
   </TouchableOpacity>
 );
 
-const CircleButton = ({ onPress, title }) => (
-  <TouchableOpacity
-    activeOpacity={0.8}
-    onPress={onPress}
-    style={styles.circleButtonContainer}>
-    <Text style={styles.circleButtonText}>{title}</Text>
-  </TouchableOpacity>
-);
+
 
 
 export default function App() {
+
+  const [selectedItem, setSelectedItem ] = useState(2);
+  const [itemList , setItemList ] = useState(['10%', '12%', '15%', '18%', '20%']);
+  
   return (
     <SafeAreaView>
     <View style={styles.container}>
@@ -38,19 +38,21 @@ export default function App() {
       />
       <View style = {styles.percentagePadding}>
         <Text style = {styles.percentage}>Tip</Text>
+      
+        <Text>
+          <Picker style={{width: 150, height: 150}}
+            selectedValue={selectedItem}
+            itemStyle={{color:"#8B47E6", fontSize:26, fontFamily: "ArialRoundedMTBold"}}
+            onValueChange={(index) => setSelectedItem(index) }>
+            {itemList.map((value, i) => (
+              <PickerItem label={value} value={i} key={i}/>
+            ))}
+          </Picker>
+        </Text>
       </View>
-      <TextInput
-          style={styles.tipInput}
-          placeholder="0.00"
-          keyboardType="numeric"
-      />
       <View style = {styles.splitPadding}>
         <Text style = {styles.split}>Split</Text>
-        <CircleButton
-          title="-"
-          onPress={() => console.log(number)}
-        />
-        <Text style={styles.splitPrice}>{number}</Text>
+        <Text style = {styles.price}>0.00</Text>
       </View>
       <View style = {styles.digitsPadding}>
       <View style={styles.firstRow}>
@@ -139,23 +141,25 @@ const styles = StyleSheet.create({
   percentagePadding: {
     minWidth: "10%",
     width: "90%",
-    paddingTop: "1%",
-    paddingLeft: "5%",
-    minHeight: 10,
+    paddingTop: "-5%",
+    paddingLeft: "0%",
+    minHeight: 5,
     backgroundColor: "#fff",
   },
   percentage: {
+    paddingLeft: "5%",
     fontSize: 18,
     color: "grey",
     fontFamily: "ArialRoundedMTBold",
   },
   splitPadding: {
-    marginTop: "5%",
+    marginTop: "1%",
     minWidth: "10%",
     width: "90%",
-    paddingTop: "5%",
+    paddingTop: "3%",
     paddingLeft: "5%",
-    minHeight: 100,
+    minHeight: 90,
+    height: 100,
     backgroundColor: "#EEF0F8",
     borderRadius: 20,
   },
@@ -177,7 +181,8 @@ const styles = StyleSheet.create({
     minWidth: "25%",
     width: "90%",
     minHeight: 150,
-    marginTop: 50,
+    marginTop: 35,
+    marginBottom: 10,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
@@ -227,8 +232,9 @@ const styles = StyleSheet.create({
     borderColor: "#dcdde1",
     minWidth: "10%",
     width: "100%",
-    paddingTop: "3%",
-    minHeight: 100,
+    paddingTop: "1%",
+    paddingBottom: "5%",
+    minHeight: 50,
     alignContent: "center",
     backgroundColor: "#fff",
     flexDirection: 'row',
@@ -268,20 +274,24 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: "ArialRoundedMTBold",
     color: "#000",
-    fontWeight: "bold",
     alignSelf: "center",
-    textTransform: "uppercase"
+    justifyContent: "center",
   },
   billInput: {
     width: "80%",
-    height: "20%",
+    height: "15%",
     fontSize: 48,
     fontFamily: "ArialRoundedMTBold",
   },
   tipInput: {
     width: "80%",
-    height: "20%",
+    height: "10%",
     fontSize: 48,
     fontFamily: "ArialRoundedMTBold",
   },
+  price: {
+    fontFamily: "ArialRoundedMTBold",
+    fontSize: 48,
+    color: "#8B47E6",
+  }
 });
