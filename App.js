@@ -1,11 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
 import { StyleSheet, Button, View, TouchableOpacity, SafeAreaView, Text, TextInput } from 'react-native';
-import Picker from '@gregfrench/react-native-wheel-picker'
+import Picker from '@gregfrench/react-native-wheel-picker';
 
 var PickerItem = Picker.Item;
-
-
 
 const AppButton = ({ onPress, title }) => (
   <TouchableOpacity
@@ -16,13 +14,35 @@ const AppButton = ({ onPress, title }) => (
   </TouchableOpacity>
 );
 
-
-
+const CircleButton = ({ onPress, title }) => (
+  <TouchableOpacity
+    activeOpacity={0.8}
+    onPress={onPress}
+    style={styles.circleButtonContainer}>
+    <Text style={styles.circleButtonText}>{title}</Text>
+  </TouchableOpacity>
+);
 
 export default function App() {
 
   const [selectedItem, setSelectedItem ] = useState(2);
   const [itemList , setItemList ] = useState(['10%', '12%', '15%', '18%', '20%']);
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+  const [flexDirection, setflexDirection] = useState("row");
+  const [justifyContent, setJustifyContent] = useState("space-evenly");
+
+  const decrementCount = () => {
+    if (count > 0) setCount(count - 1);
+  };
+
+  const incrementCount = () => {
+    setCount(count + 1);
+  };
+
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
   
   return (
     <SafeAreaView>
@@ -38,7 +58,6 @@ export default function App() {
       />
       <View style = {styles.percentagePadding}>
         <Text style = {styles.percentage}>Tip</Text>
-      
         <Text>
           <Picker style={{width: 150, height: 150}}
             selectedValue={selectedItem}
@@ -50,69 +69,90 @@ export default function App() {
           </Picker>
         </Text>
       </View>
-      <View style = {styles.splitPadding}>
+      <View style = {styles.splitPadding}
+      label="flexDirection"
+      values={["row"]}
+      selectedValue={flexDirection}
+      setSelectedValue={setflexDirection}>
         <Text style = {styles.split}>Split</Text>
-        <Text style = {styles.price}>0.00</Text>
+        <Text style = {styles.split}>Split total</Text>
+      </View>
+      <View style = {styles.splitCounter}
+      label="flexDirection"
+      values={["row"]}
+      selectedValue={flexDirection}
+      setSelectedValue={setflexDirection}>
+      <CircleButton
+        title="-"
+        onPress={() => decrementCount()}
+      />
+        <Text style = {styles.price}>{count}</Text>
+        <CircleButton
+        title="+"
+        onPress={() => incrementCount()}
+      />
+      <View style = {styles.split_counter_price}></View>
+      <Text style = {styles.price}>0.00</Text>
       </View>
       <View style = {styles.digitsPadding}>
-      <View style={styles.firstRow}>
-        <AppButton
-          title="1"
-          onPress={() => console.log('1')}
-        />
-        <AppButton
-          title="2"
-          onPress={() => console.log('2')}
-        />
-        <AppButton
-          title="3"
-          onPress={() => console.log('3')}
-        />
-      </View>
-      <View style={styles.secondRow}>
-        <AppButton
-          title="4"
-          onPress={() => console.log('4')}
-        /> 
-        <AppButton
-          title="5"
-          onPress={() => console.log('5')}
-        />
-        <AppButton
-          title="6"
-          onPress={() => console.log('6')}
-        />
-      </View>
-      <View style={styles.thirdRow}>
-        <AppButton
-          title="7"
-          onPress={() => console.log('7')}
-        />
-        <AppButton
-          title="8"
-          onPress={() => console.log('8')}
-        />
-        <AppButton
-          title="9"
-          onPress={() => console.log('9')}
-        />
+        <View style={styles.firstRow}>
+          <AppButton
+            title="1"
+            onPress={() => console.log('1')}
+          />
+          <AppButton
+            title="2"
+            onPress={() => console.log('2')}
+          />
+          <AppButton
+            title="3"
+            onPress={() => console.log('3')}
+          />
         </View>
-        <View style={styles.fourthRow}>
-        <AppButton
-          title="."
-          onPress={() => console.log('Decimal')}
-        />
-        <AppButton 
-          title="0"
-          onPress={() => console.log('0')}
-        /> 
-        <AppButton
-          title="<"
-          onPress={() => console.log('Erase')}
-        />
+        <View style={styles.secondRow}>
+          <AppButton
+            title="4"
+            onPress={() => console.log('4')}
+          /> 
+          <AppButton
+            title="5"
+            onPress={() => console.log('5')}
+          />
+          <AppButton
+            title="6"
+            onPress={() => console.log('6')}
+          />
+        </View>
+        <View style={styles.thirdRow}>
+          <AppButton
+            title="7"
+            onPress={() => console.log('7')}
+          />
+          <AppButton
+            title="8"
+            onPress={() => console.log('8')}
+          />
+          <AppButton
+            title="9"
+            onPress={() => console.log('9')}
+          />
+          </View>
+          <View style={styles.fourthRow}>
+          <AppButton
+            title="."
+            onPress={() => console.log('Decimal')}
+          />
+          <AppButton 
+            title="0"
+            onPress={() => console.log('0')}
+          /> 
+          <AppButton
+            title="<"
+            onPress={() => console.log('Erase')}
+          />
+          </View>
         </View>
       </View>
-    </View>
     </SafeAreaView>
   );
 }
@@ -162,11 +202,26 @@ const styles = StyleSheet.create({
     height: 100,
     backgroundColor: "#EEF0F8",
     borderRadius: 20,
+    flexDirection: "row",
+  },
+  splitCounter: {
+    marginTop: "-15%",
+    minWidth: "10%",
+    width: "90%",
+    paddingTop: "3%",
+    paddingLeft: "5%",
+    minHeight: 90,
+    height: 100,
+    backgroundColor: "#EEF0F8",
+    borderRadius: 20,
+    flexDirection: "row",
   },
   split: {
     fontSize: 18,
     color: "#8B47E6",
     fontFamily: "ArialRoundedMTBold",
+    flex: 1,
+    marginVertical: 1,
   },
   splitPrice:{
     fontSize: 30,
@@ -175,6 +230,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase"
+  },
+  split_counter_price:{
+    marginHorizontal: "11%",
   },
   digitsPadding: {
     flex: 1,
@@ -268,12 +326,12 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     borderRadius: 100,
-    marginTop: 7,
+    marginTop: 10,
   },
   circleButtonText: {
     fontSize: 30,
     fontFamily: "ArialRoundedMTBold",
-    color: "#000",
+    color: "#8B47E6",
     alignSelf: "center",
     justifyContent: "center",
   },
