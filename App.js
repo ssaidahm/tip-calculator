@@ -1,9 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet, Button, View, TouchableOpacity, SafeAreaView, Text, TextInput } from 'react-native';
+import { TouchableWithoutFeedback, StyleSheet, Button, View, TouchableOpacity, SafeAreaView, Text, TextInput } from 'react-native';
 import Picker from '@gregfrench/react-native-wheel-picker';
 
 var PickerItem = Picker.Item;
+var bill_total = 0;
+bill_total = bill_total.toFixed(2);
+
+var tip_total = 0;
+tip_total = tip_total.toFixed(2);
+
+var split_total = 0;
+split_total = split_total.toFixed(2);
 
 const AppButton = ({ onPress, title }) => (
   <TouchableOpacity
@@ -24,37 +32,32 @@ const CircleButton = ({ onPress, title }) => (
 );
 
 export default function App() {
-
   const [selectedItem, setSelectedItem ] = useState(2);
   const [itemList , setItemList ] = useState(['10%', '12%', '15%', '18%', '20%']);
-  const [count, setCount] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
+  const [count, setCount] = useState(1);
   const [flexDirection, setflexDirection] = useState("row");
-  const [justifyContent, setJustifyContent] = useState("space-evenly");
+  const [billTotal, setBillTotal] = useState();
 
   const decrementCount = () => {
-    if (count > 0) setCount(count - 1);
+    if (count > 1) setCount(count - 1);
   };
 
   const incrementCount = () => {
-    setCount(count + 1);
+    if (count < 9) setCount(count + 1);
   };
 
-  const toggleVisibility = () => {
-    setIsVisible(!isVisible);
-  };
-  
   return (
     <SafeAreaView>
+      
     <View style={styles.container}>
       <StatusBar style="auto" />
       <View style = {styles.calculationPadding}>
         <Text style = {styles.calculation}>Bill total</Text>
-        </View>
-      <TextInput
-          style={styles.billInput}
-          placeholder="0.00"
-          keyboardType="numeric"
+      </View>
+      <TextInput 
+        style={styles.billInput}
+        placeholder="0.00"
+        keyboardType="numeric"
       />
       <View style = {styles.percentagePadding}>
         <Text style = {styles.percentage}>Tip</Text>
@@ -70,10 +73,10 @@ export default function App() {
         </Text>
       </View>
       <View style = {styles.splitPadding}
-      label="flexDirection"
-      values={["row"]}
-      selectedValue={flexDirection}
-      setSelectedValue={setflexDirection}>
+        label="flexDirection"
+        values={["row"]}
+        selectedValue={flexDirection}
+        setSelectedValue={setflexDirection}>
         <Text style = {styles.split}>Split</Text>
         <Text style = {styles.split}>Split total</Text>
       </View>
@@ -94,64 +97,6 @@ export default function App() {
       <View style = {styles.split_counter_price}></View>
       <Text style = {styles.price}>0.00</Text>
       </View>
-      <View style = {styles.digitsPadding}>
-        <View style={styles.firstRow}>
-          <AppButton
-            title="1"
-            onPress={() => console.log('1')}
-          />
-          <AppButton
-            title="2"
-            onPress={() => console.log('2')}
-          />
-          <AppButton
-            title="3"
-            onPress={() => console.log('3')}
-          />
-        </View>
-        <View style={styles.secondRow}>
-          <AppButton
-            title="4"
-            onPress={() => console.log('4')}
-          /> 
-          <AppButton
-            title="5"
-            onPress={() => console.log('5')}
-          />
-          <AppButton
-            title="6"
-            onPress={() => console.log('6')}
-          />
-        </View>
-        <View style={styles.thirdRow}>
-          <AppButton
-            title="7"
-            onPress={() => console.log('7')}
-          />
-          <AppButton
-            title="8"
-            onPress={() => console.log('8')}
-          />
-          <AppButton
-            title="9"
-            onPress={() => console.log('9')}
-          />
-          </View>
-          <View style={styles.fourthRow}>
-          <AppButton
-            title="."
-            onPress={() => console.log('Decimal')}
-          />
-          <AppButton 
-            title="0"
-            onPress={() => console.log('0')}
-          /> 
-          <AppButton
-            title="<"
-            onPress={() => console.log('Erase')}
-          />
-          </View>
-        </View>
       </View>
     </SafeAreaView>
   );
@@ -169,7 +114,7 @@ const styles = StyleSheet.create({
     width: "90%",
     minHeight: 10,
     backgroundColor: "#fff",
-    marginTop: "50%",
+    marginTop: "20%",
     paddingTop: "1%",
     paddingLeft: "5%",
   },
@@ -181,7 +126,7 @@ const styles = StyleSheet.create({
   percentagePadding: {
     minWidth: "10%",
     width: "90%",
-    paddingTop: "-5%",
+    paddingTop: "0%",
     paddingLeft: "0%",
     minHeight: 5,
     backgroundColor: "#fff",
@@ -193,7 +138,7 @@ const styles = StyleSheet.create({
     fontFamily: "ArialRoundedMTBold",
   },
   splitPadding: {
-    marginTop: "1%",
+    marginTop: "15%",
     minWidth: "10%",
     width: "90%",
     paddingTop: "3%",
@@ -233,70 +178,6 @@ const styles = StyleSheet.create({
   },
   split_counter_price:{
     marginHorizontal: "11%",
-  },
-  digitsPadding: {
-    flex: 1,
-    minWidth: "25%",
-    width: "90%",
-    minHeight: 150,
-    marginTop: 35,
-    marginBottom: 10,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: 24,
-    fontFamily: "ArialRoundedMTBold",
-  },
-  digits: {
-    fontSize: 24,
-    color: "#8854d0",
-    fontFamily: "ArialRoundedMTBold",
-  },
-  firstRow: {
-    borderColor: "#dcdde1",
-    minWidth: "10%",
-    width: "100%",
-    marginTop: "50%",
-    paddingTop: "3%",
-    minHeight: 100,
-    backgroundColor: "#fff",
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  secondRow: {
-    marginVertical: 0.2,
-    borderColor: "#dcdde1",
-    minWidth: "10%",
-    width: "100%",
-    paddingTop: "3%",
-    minHeight: 100,
-    backgroundColor: "#fff",
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  thirdRow: {
-    marginVertical: 0.2,
-    borderColor: "#dcdde1",
-    minWidth: "10%",
-    width: "100%",
-    paddingTop: "3%",
-    minHeight: 100,
-    backgroundColor: "#fff",
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  fourthRow: {
-    marginVertical: 0.2,
-    borderColor: "#dcdde1",
-    minWidth: "10%",
-    width: "100%",
-    paddingTop: "1%",
-    paddingBottom: "5%",
-    minHeight: 50,
-    alignContent: "center",
-    backgroundColor: "#fff",
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
   },
   appButtonContainer: {
     elevation: 8,
